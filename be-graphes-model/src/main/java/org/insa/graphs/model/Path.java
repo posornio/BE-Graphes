@@ -34,8 +34,29 @@ public class Path {
      */
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
-        List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+                double speed=1.0;
+                List<Node> nodes_loc = graph.getNodes();
+                List<Arc> arcs = new ArrayList<Arc>();
+                for (Node index :nodes_loc){
+                    List <Arc>  list_arc=index.getSuccessors();
+                    double minimum = 1.0/0.0;
+                    Arc arcret=null;
+                    Node noderet=null;
+                    for (Arc indexArc:list_arc){            
+                      if( indexArc.getTravelTime(speed)<minimum&&nodes_loc.contains(indexArc.getDestination())){
+                           arcret=indexArc;
+                           noderet=indexArc.getDestination();
+                           nodes_loc.remove(noderet);
+                           //arcret.
+                           
+                       }
+                       
+                    }
+                    arcs.add(arcret);
+                                
+                    //nodes_loc.remove(noderet);
+                    
+                }
         return new Path(graph, arcs);
     }
 
@@ -51,12 +72,31 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
-     */
+    */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+
+        List<Node> nodes_loc = graph.getNodes();
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        for (Node index :nodes_loc){
+            List <Arc>  list_arc=index.getSuccessors();
+            double minimum = 1.0/0.0;
+            Arc arcret=null;
+            Node noderet=null;
+            for (Arc indexArc:list_arc){            
+              if( indexArc.getLength()<minimum&&nodes_loc.contains(indexArc.getDestination())){
+                   arcret=indexArc;
+                   noderet=indexArc.getDestination();
+                   nodes_loc.remove(noderet);
+                   //arcret.
+                   
+               }
+               
+            }
+            arcs.add(arcret);
+            //nodes_loc.remove(noderet);
+            
+        }
         return new Path(graph, arcs);
     }
 
@@ -201,8 +241,18 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
-        return false;
+        if (isEmpty() || size() == 1){
+            return true;
+        }
+        Node tmp = origin;
+        for(Arc arc : arcs){
+            if(tmp != arc.getOrigin()){
+  
+                return false;
+            }
+            tmp = arc.getDestination();
+        }
+        return tmp == this.getDestination();  
     }
 
     /**
