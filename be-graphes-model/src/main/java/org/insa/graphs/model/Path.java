@@ -233,10 +233,11 @@ public class Path {
      */
     public double getTravelTime(double speed) {
 
-        //double ret=0;
-        double dist= (double) this.getLength();
-        double ret= dist/speed;
-        // TODO:
+        double ret = 0;
+        for (Arc index :this.arcs){
+            ret+=index.getTravelTime(speed);
+
+        }
         return ret;
     }
 
