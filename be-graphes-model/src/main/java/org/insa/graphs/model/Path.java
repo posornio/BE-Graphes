@@ -210,11 +210,16 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     * @deprecated Need to be implemented.
+     * Need to be implemented.
      */
     public float getLength() {
+        float ret = 0;
+        for (Arc index :this.arcs){
+            ret+=index.getLength();
+        }
+
         // TODO:
-        return 0;
+        return ret;
     }
 
     /**
@@ -225,11 +230,14 @@ public class Path {
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
      * 
-     * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
+
+        //double ret=0;
+        double dist= (double) this.getLength();
+        double ret= dist/speed;
         // TODO:
-        return 0;
+        return ret;
     }
 
     /**
@@ -241,8 +249,16 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+        double ret = 0;
+        for (Arc index :this.arcs){
+            ret+=index.getMinimumTravelTime();
+
+        }
+                    
+        return ret;
     }
 
 }
+    
+
+
