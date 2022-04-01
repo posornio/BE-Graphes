@@ -58,7 +58,11 @@ public class Path {
                         arcret=indexArc; 
                         minimum=indexArc.getLength();                  
                                          
-                    }                  
+                    } 
+                    if (arcret==null){
+                        throw new IllegalArgumentException("Path is not Valid!!") ;
+    
+                    }                 
                 } 
                 arcs.add(arcret);     
             }
@@ -108,7 +112,6 @@ public class Path {
                 Arc arcret=null;
                
                 for (Arc indexArc:list_arc){
-                      
                     if( indexArc.getLength()<minimum&&(indexArc.getDestination().compareTo(nodes.get(i+1))==0)){
                         arcret=indexArc; 
                         minimum=indexArc.getLength();                            
@@ -116,8 +119,13 @@ public class Path {
                                     
                 }
                 arcs.add(arcret);
-                
+            
+                if (arcret==null){
+                    throw new IllegalArgumentException("Path is not Valid!!") ;
+
+                }
             }
+                
             Path pathret= new Path(graph,arcs);
             pathret2=pathret;
 
