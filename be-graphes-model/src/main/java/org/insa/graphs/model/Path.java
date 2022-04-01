@@ -31,32 +31,44 @@ public class Path {
      *         consecutive nodes in the list are not connected in the graph.
      * 
      */
-    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
-            throws IllegalArgumentException {
-                double speed=1.0;
-                List<Node> nodes_loc = graph.getNodes();
-                List<Arc> arcs = new ArrayList<Arc>();
-                for (Node index :nodes_loc){
-                    List <Arc>  list_arc=index.getSuccessors();
-                    double minimum = 1.0/0.0;
-                    Arc arcret=null;
-                    Node noderet=null;
-                    for (Arc indexArc:list_arc){            
-                      if( indexArc.getTravelTime(speed)<minimum&&nodes_loc.contains(indexArc.getDestination())){
-                           arcret=indexArc;
-                           noderet=indexArc.getDestination();
-                           nodes_loc.remove(noderet);
-                           //arcret.
-                           
-                       }
-                       
-                    }
-                    arcs.add(arcret);
-                                
-                    //nodes_loc.remove(noderet);
-                    
-                }
-        return new Path(graph, arcs);
+    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException{
+        
+        Path pathret2= new Path(graph);
+         if (nodes.size()==0){
+           Path pathret= new Path(graph);
+           pathret2=pathret;
+
+         }
+         else if (nodes.size()==1){
+            Path pathret= new Path(graph,nodes.get(0));
+            pathret2=pathret;
+
+         }
+         else{
+         
+            List<Arc> arcs = new ArrayList<Arc>();
+            
+            for (int i=0;i<nodes.size()-1;i++){
+                Node index=nodes.get(i);
+                List <Arc>  list_arc=index.getSuccessors();
+                double minimum = Double.POSITIVE_INFINITY;
+                Arc arcret=null;
+                for (Arc indexArc:list_arc){         
+                    if( indexArc.getMinimumTravelTime()<minimum&&(indexArc.getDestination().compareTo(nodes.get(i+1))==0)){
+                        arcret=indexArc; 
+                        minimum=indexArc.getLength();                  
+                                         
+                    }                  
+                } 
+                arcs.add(arcret);     
+            }
+            Path pathret= new Path(graph,arcs);
+            pathret2=pathret;
+        }
+        if (pathret2.isValid()==false){
+            throw new IllegalArgumentException("Path is not Valid!!") ;
+        }
+        return pathret2;
     }
 
     /**
@@ -72,31 +84,48 @@ public class Path {
      *         consecutive nodes in the list are not connected in the graph.
      * 
     */
-    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
-            throws IllegalArgumentException {
+    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException {
+        Path pathret2= new Path(graph);
+         if (nodes.size()==0){
+           Path pathret= new Path(graph);
+           pathret2=pathret;
 
-        List<Node> nodes_loc = graph.getNodes();
-        List<Arc> arcs = new ArrayList<Arc>();
-        for (Node index :nodes_loc){
-            List <Arc>  list_arc=index.getSuccessors();
-            double minimum = 1.0/0.0;
-            Arc arcret=null;
-            Node noderet=null;
-            for (Arc indexArc:list_arc){            
-              if( indexArc.getLength()<minimum&&nodes_loc.contains(indexArc.getDestination())){
-                   arcret=indexArc;
-                   noderet=indexArc.getDestination();
-                   nodes_loc.remove(noderet);
-                   //arcret.
-                   
-               }
-               
-            }
-            arcs.add(arcret);
-            //nodes_loc.remove(noderet);
+         }
+         else if (nodes.size()==1){
+            Path pathret= new Path(graph,nodes.get(0));
+            pathret2=pathret;
+
+         }
+         else{
+         
             
+            List<Arc> arcs = new ArrayList<Arc>();
+            
+            for (int i=0;i<nodes.size()-1;i++){
+                Node index=nodes.get(i);
+                List <Arc>  list_arc=index.getSuccessors();
+                double minimum = Double.POSITIVE_INFINITY;
+                Arc arcret=null;
+               
+                for (Arc indexArc:list_arc){
+                      
+                    if( indexArc.getLength()<minimum&&(indexArc.getDestination().compareTo(nodes.get(i+1))==0)){
+                        arcret=indexArc; 
+                        minimum=indexArc.getLength();                            
+                    }
+                                    
+                }
+                arcs.add(arcret);
+                
+            }
+            Path pathret= new Path(graph,arcs);
+            pathret2=pathret;
+
         }
-        return new Path(graph, arcs);
+        if (pathret2.isValid()==false){
+            throw new IllegalArgumentException("Path is not Valid!!") ;
+        }
+        return pathret2;
     }
 
     /**
