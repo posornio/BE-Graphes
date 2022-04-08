@@ -140,10 +140,19 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         if (this.isEmpty()){
             throw new ElementNotFoundException("Le Heap est vide");
         }
-        else{
-            int index = this.currentSize--;
-            this.arraySet(0,this.array.get(index));
-            this.percolateDown(0);}
+        int size=this.currentSize;
+        int index=-1;
+        for (int i =0;i <size;i++){
+            if (this.array.get(i)==x){
+                index =i;
+                break;
+            }
+        }
+        if (index ==-1) throw new ElementNotFoundException(x);
+        this.array.set(index,this.array.get(--this.currentSize));
+        this.percolateDown(index);
+        this.percolateUp(index);
+
     }
 
     @Override
