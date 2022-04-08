@@ -1,0 +1,46 @@
+package org.insa.graphs.algorithm;
+
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.util.List;
+
+import org.insa.graphs.algorithm.Label;
+import org.insa.graphs.model.Node;
+
+
+public class Label{
+
+   private Node sommetCourant;
+   private boolean Marque;
+   private double cout;
+   private Node pere;
+
+    public Label(Node sommetCourant){
+        this.sommetCourant=sommetCourant;
+        this.Marque=false;
+        this.cout=Double.POSITIVE_INFINITY;
+        this.pere=null;
+    }
+    
+   
+
+    public double getCost(){
+        return this.cout;
+    }
+    public Node getPere(){
+        return this.pere;
+    }
+
+    public boolean getMarque(){
+        return this.Marque;
+    }
+
+    public void setCost(double cost){
+        this.cout=cost;
+    }
+    public void setPere(Node pere){
+        this.pere = pere; 
+    }
+    public void setMarque(boolean Marque){
+        this.Marque = true;
+    }
+}
