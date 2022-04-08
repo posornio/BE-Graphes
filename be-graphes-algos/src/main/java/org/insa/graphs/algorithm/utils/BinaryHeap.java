@@ -138,7 +138,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     @Override
     public void remove(E x) throws ElementNotFoundException {
         if (this.isEmpty()){
-            throw new ElementNotFoundException("Le Heap est vide");
+            throw new ElementNotFoundException(x);
         }
         int size=this.currentSize;
         int index=-1;
