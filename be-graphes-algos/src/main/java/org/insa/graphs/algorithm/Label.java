@@ -7,7 +7,7 @@ import org.insa.graphs.algorithm.Label;
 import org.insa.graphs.model.Node;
 
 
-public class Label{
+public class Label implements Comparable<Label>{
 
    private Node sommetCourant;
    private boolean Marque;
@@ -21,7 +21,9 @@ public class Label{
         this.pere=null;
     }
     
-   
+    public Node getSommet(){
+        return this.sommetCourant;
+    }
 
     public double getCost(){
         return this.cout;
@@ -41,6 +43,14 @@ public class Label{
         this.pere = pere; 
     }
     public void setMarque(boolean Marque){
-        this.Marque = true;
+        this.Marque = Marque;
+    }
+
+
+
+    @Override
+    public int compareTo(Label other) {
+      return  Math.round(Double.compare(getCost(), other.getCost()));
+
     }
 }
