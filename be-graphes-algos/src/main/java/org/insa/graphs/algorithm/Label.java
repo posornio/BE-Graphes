@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.insa.graphs.algorithm.Label;
 import org.insa.graphs.model.Node;
+import org.insa.graphs.model.Arc;
+
 
 
 public class Label implements Comparable<Label>{
@@ -12,7 +14,7 @@ public class Label implements Comparable<Label>{
    private Node sommetCourant;
    private boolean Marque;
    private double cout;
-   private Node pere;
+   private Arc pere;
 
     public Label(Node sommetCourant){
         this.sommetCourant=sommetCourant;
@@ -28,7 +30,7 @@ public class Label implements Comparable<Label>{
     public double getCost(){
         return this.cout;
     }
-    public Node getPere(){
+    public Arc getPere(){
         return this.pere;
     }
 
@@ -39,7 +41,7 @@ public class Label implements Comparable<Label>{
     public void setCost(double cost){
         this.cout=cost;
     }
-    public void setPere(Node pere){
+    public void setPere(Arc pere){
         this.pere = pere; 
     }
     public void setMarque(boolean Marque){

@@ -13,6 +13,8 @@ import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
+import org.insa.graphs.model.Point;
+import org.insa.graphs.model.RoadInformation;
 
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
@@ -29,18 +31,57 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Node origine =data.getOrigin();
         labels.get(origine.getId()).setCost(0.0);
         ShortestPathSolution solution = null;
+        final int nbNodes = data.getGraph().size();
+
+        Arc[] predecessorArcs = new Arc[nbNodes];
+
         // TODO:
-        BinaryHeap<Label> remaining_tas= new BinaryHeap<Label>(); 
-       
+        BinaryHeap<Label> tas= new BinaryHeap<Label>();
+        tas.insert(labels.get(origine.getId())); 
         
-        while(!remaining_tas.isEmpty()){
-            Label x= remaining_tas.findMin();
+        while(!tas.isEmpty()){
+            Label x= tas.deleteMin();
             x.setMarque(true);
             for (Arc y:x.getSommet().getSuccessors()){
-                //if (y.getDestination().getId())
+                Label labelY=labels.get(y.getDestination().getId());
+                if (!labelY.getMarque()){
+                    //double coutAv = labelY.getCost();
+                    
+                    if (x.getCost()+y.getLength()<labelY.getCost()){
+                        if (labelY.getPere()!=null){
+                            tas.remove(labelY);
+                        }
+                        labelY.setCost(x.getCost()+y.getLength());
+                        Arc arc = y;
+                        labelY.setPere(y);
+                        tas.insert(labelY);
+                        predecessorArcs[arc.getDestination().getId()] = arc;
+
+
+                    }
+                    
+                }
             }
         }
 
+        if (labels.get(data.getDestination().getId()).getPere()==null){
+            solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+
+        }
+        else{
+            notifyDestinationReached(data.getDestination());
+
+            ArrayList<Arc> arcs = new ArrayList<>();
+            Arc arc = predecessorArcs[data.getDestination().getId()];
+            //Arc arc = labelY.getPere();
+            while(arc!=null){
+                arcs.add(arc);
+                arc = predecessorArcs[arc.getOrigin().getId()];
+
+            }
+            Collections.reverse(arcs);
+            solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(data.getGraph(), arcs));
+        }
         return solution;
     }
 
@@ -61,5 +102,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         return liste_label;
         
     }
+    /*
+        for (Label index:listeLab2){
+            Node x2=index.getSommet();
+            Arc iArc=null;
+            ArrayList <Point> points= new ArrayList<Point>();
+            points.add(index.getSommet().getPoint());
+            float len=0;
+            while (index.getPere()!=null){
+                points.add(index.getPere().getDestination());
+                len= len+(float)index.getCost();
+                index=labels.get(index.getPere().getId());
+            }
+            RoadInformation ri=null;
+            //index.getSommet();
+            iArc=Node.linkNodes(x2,index.getSommet(),len,ri,points);
+
+            arcRet.add(iArc);
+        } */
+
 
 }
