@@ -54,13 +54,13 @@ public class Path {
                 double minimum = Double.POSITIVE_INFINITY;
                 Arc arcret=null;
                 for (Arc indexArc:list_arc){         
-                    if( indexArc.getMinimumTravelTime()<minimum&&(indexArc.getDestination().compareTo(nodes.get(i+1))==0)){
+                    if( (indexArc.getMinimumTravelTime()<minimum)&&(indexArc.getDestination().compareTo(nodes.get(i+1))==0)){
                         arcret=indexArc; 
                         minimum=indexArc.getLength();                  
                                          
                     } 
                     if (arcret==null){
-                        throw new IllegalArgumentException("Path is not Valid!!") ;
+                        throw new IllegalArgumentException("Path is not Valid!") ;
     
                     }                 
                 } 

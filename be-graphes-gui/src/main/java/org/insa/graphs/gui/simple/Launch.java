@@ -5,15 +5,18 @@ import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import org.insa.graphs.algorithm.shortestpath.DijkstraAlgorithm;
 import org.insa.graphs.gui.drawing.Drawing;
 import org.insa.graphs.gui.drawing.components.BasicDrawing;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Path;
 import org.insa.graphs.model.io.BinaryGraphReader;
+import org.insa.graphs.model.io.BinaryPathReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.insa.graphs.model.io.PathReader;
 
@@ -43,31 +46,42 @@ public class Launch {
         return basicDrawing;
     }
 
-    public static void main(String[] args) throws Exception {
-
-        // Visit these directory to see the list of available files on Commetud.
-        final String mapName = "/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
-        final String pathName = "/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
-
+    public static void LancerGraph(String mapName,String pathName) throws Exception{
         // Create a graph reader.
-        final GraphReader reader = new BinaryGraphReader(
-                new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
+        final GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
 
         // TODO: Read the graph.
-        final Graph graph = null;
+        final Graph graph = reader.read();
 
         // Create the drawing:
         final Drawing drawing = createDrawing();
 
         // TODO: Draw the graph on the drawing.
-
+        drawing.drawGraph(graph);
         // TODO: Create a PathReader.
-        final PathReader pathReader = null;
+
+        final PathReader pathReader = new BinaryPathReader(new DataInputStream(new BufferedInputStream(new FileInputStream(pathName))));
 
         // TODO: Read the path.
-        final Path path = null;
+        final Path path = pathReader.readPath(graph);
 
         // TODO: Draw the path.
+        drawing.drawPath(path);
+        
+
+        //test 
     }
 
-}
+
+    public static void main(String[] args) throws Exception {
+
+        // Visit these directory to see the list of available files on Commetud.
+        final String mapName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/haute-garonne.mapgr";
+        final String pathName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31_insa_bikini_canal.path";
+        
+       // int Djis= 
+        
+        LancerGraph(mapName,pathName);
+
+    
+}}

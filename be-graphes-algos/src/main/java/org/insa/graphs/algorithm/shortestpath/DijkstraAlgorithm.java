@@ -29,6 +29,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         final ShortestPathData data = getInputData();
         List<Label> labels =AssocierTous(data.getGraph());
         Node origine =data.getOrigin();
+        notifyOriginProcessed(data.getOrigin());
+
         labels.get(origine.getId()).setCost(0.0);
         ShortestPathSolution solution = null;
         final int nbNodes = data.getGraph().size();
@@ -90,6 +92,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         return label;
         }
 
+    public float getLengthDjis(){
+        ShortestPathSolution solution=this.doRun();
+        return solution.getPath().getLength();
+
+    }
+
     public List<Label> AssocierTous(Graph graph){
         int nb= graph.size();
         List<Label> liste_label= new ArrayList<Label>();
@@ -99,6 +107,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             
 
         }
+        //System.out.println("coût djikstra: " + )
         return liste_label;
         
     }
