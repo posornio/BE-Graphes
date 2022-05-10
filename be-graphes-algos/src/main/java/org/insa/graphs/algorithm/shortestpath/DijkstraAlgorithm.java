@@ -1,20 +1,15 @@
 package org.insa.graphs.algorithm.shortestpath;
-
-import java.time.chrono.HijrahEra;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.algorithm.Label;
+import org.insa.graphs.algorithm.LabelStar;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
-import org.insa.graphs.model.Point;
-import org.insa.graphs.model.RoadInformation;
 
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
@@ -40,10 +35,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         // TODO:
         BinaryHeap<Label> tas= new BinaryHeap<Label>();
         tas.insert(labels.get(origine.getId())); 
+        boolean cond= true;
         
-        while(!tas.isEmpty()){
+        while(!tas.isEmpty() && cond == true){
             Label x= tas.deleteMin();
             x.setMarque(true);
+            notifyNodeMarked(x.getSommet());
             for (Arc y:x.getSommet().getSuccessors()){
                 Label labelY=labels.get(y.getDestination().getId());
                 if (!labelY.getMarque()){
@@ -53,15 +50,20 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                         if (labelY.getPere()!=null){
                             tas.remove(labelY);
                         }
+                        else{
+                            notifyNodeReached(y.getDestination());
+
+                        }
                         labelY.setCost(x.getCost()+y.getLength());
                         Arc arc = y;
                         labelY.setPere(y);
                         tas.insert(labelY);
                         predecessorArcs[arc.getDestination().getId()] = arc;
-
-
                     }
-                    
+                    if (labels.get(data.getDestination().getId()).getPere()!=null){
+                        notifyDestinationReached(data.getDestination());
+                        cond =false;
+                    }
                 }
             }
         }
@@ -111,24 +113,5 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         return liste_label;
         
     }
-    /*
-        for (Label index:listeLab2){
-            Node x2=index.getSommet();
-            Arc iArc=null;
-            ArrayList <Point> points= new ArrayList<Point>();
-            points.add(index.getSommet().getPoint());
-            float len=0;
-            while (index.getPere()!=null){
-                points.add(index.getPere().getDestination());
-                len= len+(float)index.getCost();
-                index=labels.get(index.getPere().getId());
-            }
-            RoadInformation ri=null;
-            //index.getSommet();
-            iArc=Node.linkNodes(x2,index.getSommet(),len,ri,points);
-
-            arcRet.add(iArc);
-        } */
-
 
 }

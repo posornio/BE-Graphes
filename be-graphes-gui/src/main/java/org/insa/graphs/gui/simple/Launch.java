@@ -79,7 +79,7 @@ public class Launch {
         final String mapName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/haute-garonne.mapgr";
         final String pathName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31_insa_bikini_canal.path";
         
-       // int Djis= 
+        //int Djis= DijkstraAlgorithm.class.getLeng
         
         LancerGraph(mapName,pathName);
 
