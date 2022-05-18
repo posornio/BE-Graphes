@@ -1,19 +1,23 @@
 package org.insa.graphs.algorithm;
+
+import javax.xml.crypto.Data;
+
+import org.insa.graphs.algorithm.shortestpath.ShortestPathData;
+import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Point;
 
-import org.insa.graphs.model.Node;
-
 public class LabelStar extends Label {
-
-    public LabelStar(Node sommetCourant) {
+    Node destination;
+    public LabelStar(Node sommetCourant,ShortestPathData data) {
         super(sommetCourant);
+        this.destination = data.getDestination();
         //TODO Auto-generated constructor stub
     }
-    public double getTotalCost(Node destination){
-        double ori = Double.POSITIVE_INFINITY;
-        Point ptDest = destination.getPoint();
-        double dest = this.getSommet().getPoint().distanceTo(ptDest);
-
-        return ori+dest;
+    
+    public Node getDestination(){
+        return this.destination;
     }
-}
+public double getTotalCost() {
+    return  this.getCost()+(double) Point.distance(this.getSommet().getPoint(), destination.getPoint());
+
+  }}

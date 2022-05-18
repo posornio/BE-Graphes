@@ -58,12 +58,12 @@ public class Path {
                         arcret=indexArc; 
                         minimum=indexArc.getLength();                  
                                          
-                    }           
-                }
-                if (arcret==null){
-                    throw new IllegalArgumentException("Path is not Valid!") ;
-
-                }       
+                    } 
+                    if (arcret==null){
+                        throw new IllegalArgumentException("Path is not Valid!") ;
+    
+                    }                 
+                } 
                 arcs.add(arcret);     
             }
             Path pathret= new Path(graph,arcs);
