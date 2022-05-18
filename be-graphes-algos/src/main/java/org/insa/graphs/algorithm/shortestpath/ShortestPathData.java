@@ -8,7 +8,8 @@ import org.insa.graphs.model.Node;
 public class ShortestPathData extends AbstractInputData {
 
     // Origin and destination nodes.
-    private final Node origin, destination;
+    private Node origin;
+    private Node destination;
 
     /**
      * Construct a new instance of ShortestPathInputData with the given parameters.
@@ -32,12 +33,21 @@ public class ShortestPathData extends AbstractInputData {
         return origin;
     }
 
+    public void setOrigin(Node origine){
+        this.origin = origine; 
+    }
+
     /**
      * @return Destination node for the path.
      */
     public Node getDestination() {
         return destination;
     }
+
+    public void setDestination(Node dest){
+        this.destination = dest; 
+    }
+
 
     @Override
     public String toString() {

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
@@ -20,6 +23,7 @@ import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
 import org.insa.graphs.model.Point;
 import org.insa.graphs.model.RoadInformation;
+import org.junit.Test;
 
 
 public class DjistraTest extends ShortestPathAlgorithm {
@@ -29,7 +33,7 @@ public class DjistraTest extends ShortestPathAlgorithm {
     }
   
 
-    final static ShortestPathData data = getInputData();
+     ShortestPathData data = getInputData();
 
     
     private static Graph graph;
@@ -39,25 +43,53 @@ public class DjistraTest extends ShortestPathAlgorithm {
     
     
 
-    public static void initAll() throws IOException {
+    public static void initAll() throws IOException {}
+    @Test
+     public void testRandom(){
+        int correcte= 0;
+
         
     
 
     for (int i=0;i<10;i++){
-        data.
+        Node or = data.getOrigin();
+        int id = or.getId();
+        float longi = (float) (or.getPoint().getLongitude()+ (int) Math.random() *(300-(-200)));
+        float lat =(float) or.getPoint().getLatitude() + (int) Math.random() *(300-(-200));
+        Point pt = new Point(longi, lat);
+        Node origine =new Node(id, pt);
+        data.setOrigin(origine);
 
 
+        Node dest = data.getOrigin();
+        int idD = dest.getId();
+        float longiD = (float) (dest.getPoint().getLongitude()+ (int) Math.random() *(300-(-200)));
+        float latD =(float) dest.getPoint().getLatitude() + (int) Math.random() *(300-(-200));
+        Point ptD = new Point(longiD, latD);
+        Node origineD =new Node(idD, ptD);
+        data.setOrigin(origineD);
+        ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
+        ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
+        if (solBell.equals(solDjis)) {
+            correcte++; }  
     }
-
-    ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
-    ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
-    boolean correcte= false;
-    if (solBell.equals(solDjis)) {
-        correcte=true;
-    }
-
-
+    assertEquals(10, correcte);
 }
+    
+
+
+
+    @Test
+    public void testzero(){
+        ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
+        ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
+    
+        if (solBell.getPath().getOrigin().getId() == 0 && solDjis.getPath().getOrigin().getId() == 0 ){
+            
+            System.out.println("On a pas bougé\n");
+            
+        }
+    }
 
 
 
