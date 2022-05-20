@@ -17,6 +17,7 @@ import java.util.List;
  *
  */
 public class Path {
+    
 
     /**
      * Create a new path that goes through the given list of nodes (in order),
@@ -31,48 +32,52 @@ public class Path {
      *         consecutive nodes in the list are not connected in the graph.
      * 
      */
-    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException{
-        
-        Path pathret2= new Path(graph);
-         if (nodes.size()==0){
-           Path pathret= new Path(graph);
-           pathret2=pathret;
+    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException {
+        List<Arc> arcs = new ArrayList<Arc>();
+        Path retPath;
 
-         }
-         else if (nodes.size()==1){
-            Path pathret= new Path(graph,nodes.get(0));
-            pathret2=pathret;
+        if (nodes.size() == 1) {
+            retPath = new Path(graph, nodes.get(0));
+        } else {
+            for (int i = 0; i < nodes.size() - 1; i++) {
+                Node node = nodes.get(i);
 
-         }
-         else{
-         
-            List<Arc> arcs = new ArrayList<Arc>();
-            
-            for (int i=0;i<nodes.size()-1;i++){
-                Node index=nodes.get(i);
-                List <Arc>  list_arc=index.getSuccessors();
-                double minimum = Double.POSITIVE_INFINITY;
-                Arc arcret=null;
-                for (Arc indexArc:list_arc){         
-                    if( (indexArc.getMinimumTravelTime()<minimum)&&(indexArc.getDestination().compareTo(nodes.get(i+1))==0)){
-                        arcret=indexArc; 
-                        minimum=indexArc.getLength();                  
-                                         
-                    } 
-                    if (arcret==null){
-                        throw new IllegalArgumentException("Path is not Valid!") ;
-    
-                    }                 
-                } 
-                arcs.add(arcret);     
+                int index = graph.getNodes().indexOf(node);
+
+                int succ = 0;
+                for (Arc arc : graph.getNodes().get(index).getSuccessors()) {
+                    if (arc.getDestination().equals(nodes.get(i + 1)));
+                        succ++;
+                }
+                if (succ == 0)
+                    throw new IllegalArgumentException("Le Path n'est pas valid!");
+
+                if (graph.getNodes().get(index).getNumberOfSuccessors() == 1) {
+                    arcs.add(graph.getNodes().get(index).getSuccessors().get(0));
+                } else {
+                    double minTime = -1;
+                    int minTimeIndex = -1;
+
+                    List<Arc> successors = graph.getNodes().get(index).getSuccessors();
+                    int nbSuccessors = graph.getNodes().get(index).getNumberOfSuccessors();
+
+                    for (int j = 0; j < nbSuccessors; j++) {
+                        if (successors.get(j).getDestination().equals(nodes.get(i + 1))) {
+                            double time = successors.get(j).getMinimumTravelTime();
+                            if (time < minTime || minTime == -1) {
+                                minTime = time;
+                                minTimeIndex = j;
+                            }
+
+                        }
+                    }
+
+                    arcs.add(graph.getNodes().get(index).getSuccessors().get(minTimeIndex));
+                }
             }
-            Path pathret= new Path(graph,arcs);
-            pathret2=pathret;
+            retPath = new Path(graph, arcs);
         }
-        if (pathret2.isValid()==false){
-            throw new IllegalArgumentException("Path is not Valid!!") ;
-        }
-        return pathret2;
+        return retPath;
     }
 
     /**
@@ -174,10 +179,12 @@ public class Path {
     private final Graph graph;
 
     // Origin of the path
-    private final Node origin;
+    private Node origin;
 
     // List of arcs in this path.
     private final List<Arc> arcs;
+
+    private Node destination;
 
     /**
      * Create an empty path corresponding to the given graph.
@@ -308,6 +315,14 @@ public class Path {
         return ret;
     }
 
+
+    public void setOrigin(Node origine){
+        this.origin = origine; 
+    }
+
+    public void setDestination(Node dest){
+        this.destination = dest; 
+    }
     /**
      * Compute the time required to travel this path if moving at the given speed.
      * 
