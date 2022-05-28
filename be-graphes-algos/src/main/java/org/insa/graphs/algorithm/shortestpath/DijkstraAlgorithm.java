@@ -128,7 +128,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
 
         if (labels.get(data.getDestination().getId()).getPere()==null){
-            solution = new ShortestPathSolution(data, Status.INFEASIBLE,pathTest);
+            solution = new ShortestPathSolution(data, Status.INFEASIBLE);
 
         }
         else{

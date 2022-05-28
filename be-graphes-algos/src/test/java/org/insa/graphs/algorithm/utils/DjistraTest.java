@@ -4,6 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.insa.graphs.algorithm.ArcInspector;
 import org.insa.graphs.algorithm.ArcInspectorFactory;
 import org.insa.graphs.algorithm.shortestpath.BellmanFordAlgorithm;
@@ -60,14 +63,19 @@ public class DjistraTest {
     }
 
     @Test
-     public void testRandom() throws IOException{
-        int correcte= 0;
+     public void testRandom() throws IOException, IllegalArgumentException{
+        List <ShortestPathSolution> listeBF = new ArrayList<>();
+        List <ShortestPathSolution> listeD = new ArrayList<>();
+        ArcInspector aInspector = ArcInspectorFactory.getAllFilters().get(1);
+        //int correcte=0;
+        boolean[] cond ={false,false,false} ;
+    for (int i=0;i<2;i++){
+        
 
-    for (int i=0;i<5;i++){
         Node or = path.getOrigin();
         int id = or.getId();
-        float longi = (float) (or.getPoint().getLongitude()+ (int) Math.random() *(300-(-200)));
-        float lat =(float) or.getPoint().getLatitude() + (int) Math.random() *(300-(-200));
+        float longi = (float) (or.getPoint().getLongitude()+ (int) Math.random() *(10000-(-10000)));
+        float lat =(float) or.getPoint().getLatitude() + (int) Math.random() *(10000-(-10000));
         Point pt = new Point(longi, lat);
         Node orMod =new Node(id, pt);
         //path.setOrigin(origine);
@@ -75,49 +83,39 @@ public class DjistraTest {
 
         Node dest = path.getDestination();
         int idD = dest.getId();
-        float longiD = (float) (dest.getPoint().getLongitude()+ (int) Math.floor(Math.random() *(300-(-200))));
-        float latD =(float) dest.getPoint().getLatitude() +(int) Math.floor( Math.random() *(300-(-200)));
+        float longiD = (float) (dest.getPoint().getLongitude()+ (int) Math.floor(Math.random() *(10000-(-10000))));
+        float latD =(float) dest.getPoint().getLatitude() +(int) Math.floor( Math.random() *(10000-(-10000)));
         Point ptD = new Point(longiD, latD);
         Node destMod =new Node(idD, ptD);
         //data.setOrigin(origineD);
-        ArcInspector aInspector = ArcInspectorFactory.getAllFilters().get(1);
         ShortestPathData data = new ShortestPathData(graph, orMod, destMod, aInspector) ;
         ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
-       // ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
-        float belLenght = solBell.getPath().getLength();
-        float dijLen = new DijkstraAlgorithm(data).getPathDjis(data).getLength();
-        if (belLenght>=dijLen) {
-            correcte++; }  
-    }
-    assertEquals(5, correcte);
-}
-
-    @Test
-    public void testzero() throws IOException{
-
-        
-        int correcte= 0;
-
-        for (int i=0;i<2;i++){
-            Node or = path.getOrigin();
-            int id = or.getId();
-            float longi = (float) (or.getPoint().getLongitude()+ (int) Math.random() *(300-(-200)));
-            float lat =(float) or.getPoint().getLatitude() + (int) Math.random() *(300-(-200));
-            Point pt = new Point(longi, lat);
-            Node origine =new Node(id, pt);
-            //path.setOrigin(origine);
-    
-    
-            //data.setOrigin(origineD);
-            ArcInspector aInspector = ArcInspectorFactory.getAllFilters().get(0);
-            ShortestPathData data = new ShortestPathData(graph, origine, origine, aInspector) ;
-            ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
-            ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
-            if (solBell.getPath()==solDjis.getPath()) {
-                correcte++; }  
-        }
-        assertEquals(2, correcte);
-    
+        ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
+        listeBF.add(solBell);
+        listeD.add(solDjis);
     }
 
+
+    ShortestPathData data = new ShortestPathData(graph, path.getOrigin(), path.getOrigin(), aInspector) ;
+    ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
+    ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
+    listeBF.add(solBell);
+    listeD.add(solDjis);
+
+    for (int j=0; j < 3; j++){
+        //float belLenght = solBell.getPath().getLength();
+        //float dijLen = new DijkstraAlgorithm(data).getPathDjis(data).getLength();
+        if (listeBF.get(j).getPath()==null && listeD.get(j).getPath()==null){
+            cond[j]=true;
+            //Les deux paths sont invalides ie dest=origine
+            //throw new IllegalArgumentException("Path is not Valid!!") ;
+        } 
+        else if ((listeBF.get(j).getPath().getLength()>=listeD.get(j).getPath().getLength())) {
+            cond[j]=true;
+    }
+    assertEquals(true, cond[j]);
 }
+
+
+
+}}
