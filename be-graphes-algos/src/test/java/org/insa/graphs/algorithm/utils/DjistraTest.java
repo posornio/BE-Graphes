@@ -11,6 +11,7 @@ import org.insa.graphs.algorithm.ArcInspector;
 import org.insa.graphs.algorithm.ArcInspectorFactory;
 import org.insa.graphs.algorithm.shortestpath.BellmanFordAlgorithm;
 import org.insa.graphs.algorithm.shortestpath.DijkstraAlgorithm;
+import org.insa.graphs.algorithm.shortestpath.ShortestPathAlgorithm;
 import org.insa.graphs.algorithm.shortestpath.ShortestPathData;
 import org.insa.graphs.algorithm.shortestpath.ShortestPathSolution;
 import org.insa.graphs.model.Arc;
@@ -60,6 +61,11 @@ public class DjistraTest {
 
         // TODO: Read the path.
         path = pathReader.readPath(graph);
+        
+    }
+
+    public ShortestPathSolution AlgoaComparer(ShortestPathData data){
+        return  new BellmanFordAlgorithm(data).run();
     }
 
     @Test
@@ -89,7 +95,7 @@ public class DjistraTest {
         Node destMod =new Node(idD, ptD);
         //data.setOrigin(origineD);
         ShortestPathData data = new ShortestPathData(graph, orMod, destMod, aInspector) ;
-        ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
+        ShortestPathSolution solBell = AlgoaComparer(data);
         ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
         listeBF.add(solBell);
         listeD.add(solDjis);

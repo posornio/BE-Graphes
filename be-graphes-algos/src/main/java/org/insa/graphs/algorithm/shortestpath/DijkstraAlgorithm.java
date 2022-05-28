@@ -108,7 +108,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             for (Arc y:x.getSommet().getSuccessors()){
                 Label labelY=labels.get(y.getDestination().getId());
                 if (!labelY.getMarque()){
-                    //double coutAv = labelY.getCost();
                     
                     if (x.getCost()+y.getLength()<labelY.getCost()){
                         if (labelY.getPere()!=null){
@@ -136,7 +135,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
             ArrayList<Arc> arcs = new ArrayList<>();
             Arc arc = predecessorArcs[data.getDestination().getId()];
-            //Arc arc = labelY.getPere();
             while(arc!=null){
                 arcs.add(arc);
                 arc = predecessorArcs[arc.getOrigin().getId()];
@@ -174,28 +172,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             
 
         }
-        //System.out.println("coût djikstra: " + )
         return liste_label;
         
     }
-    /*
-        for (Label index:listeLab2){
-            Node x2=index.getSommet();
-            Arc iArc=null;
-            ArrayList <Point> points= new ArrayList<Point>();
-            points.add(index.getSommet().getPoint());
-            float len=0;
-            while (index.getPere()!=null){
-                points.add(index.getPere().getDestination());
-                len= len+(float)index.getCost();
-                index=labels.get(index.getPere().getId());
-            }
-            RoadInformation ri=null;
-            //index.getSommet();
-            iArc=Node.linkNodes(x2,index.getSommet(),len,ri,points);
-
-            arcRet.add(iArc);
-        } */
-
 
 }
