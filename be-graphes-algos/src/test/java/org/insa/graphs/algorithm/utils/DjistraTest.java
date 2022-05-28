@@ -109,8 +109,7 @@ public class DjistraTest {
     listeD.add(solDjis);
 
     for (int j=0; j < 3; j++){
-        //float belLenght = solBell.getPath().getLength();
-        //float dijLen = new DijkstraAlgorithm(data).getPathDjis(data).getLength();
+        
         if (listeBF.get(j).getPath()==null && listeD.get(j).getPath()==null){
             cond[j]=true;
             //Les deux paths sont invalides ie dest=origine
