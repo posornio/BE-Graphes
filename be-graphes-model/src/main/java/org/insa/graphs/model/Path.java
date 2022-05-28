@@ -184,7 +184,6 @@ public class Path {
     // List of arcs in this path.
     private final List<Arc> arcs;
 
-    private Node destination;
 
     /**
      * Create an empty path corresponding to the given graph.
@@ -281,7 +280,7 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * @deprecated Need to be implemented.
+     * Need to be implemented.
      */
     public boolean isValid() {
         if (isEmpty() || size() == 1){
@@ -320,9 +319,7 @@ public class Path {
         this.origin = origine; 
     }
 
-    public void setDestination(Node dest){
-        this.destination = dest; 
-    }
+   
     /**
      * Compute the time required to travel this path if moving at the given speed.
      * 

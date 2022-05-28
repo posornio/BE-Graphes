@@ -32,12 +32,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         notifyOriginProcessed(data.getOrigin());
 
         labels.get(origine.getId()).setCost(0.0);
-        ShortestPathSolution solution = null;
+        ShortestPathSolution solution;
         final int nbNodes = data.getGraph().size();
 
         Arc[] predecessorArcs = new Arc[nbNodes];
 
-        // TODO:
         BinaryHeap<Label> tas= new BinaryHeap<Label>();
         tas.insert(labels.get(origine.getId())); 
         
@@ -82,7 +81,70 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
             }
             Collections.reverse(arcs);
-            solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(data.getGraph(), arcs));
+            Path pathSol = new Path(data.getGraph(), arcs);
+            solution = new ShortestPathSolution(data, Status.OPTIMAL,pathSol );
+        }
+        return solution;
+    }
+    protected ShortestPathSolution doRun2(ShortestPathData data) {
+            
+        //final ShortestPathData data = getInputData();
+        List<Label> labels =AssocierTous(data.getGraph());
+        Node origine =data.getOrigin();
+        notifyOriginProcessed(data.getOrigin());
+
+        labels.get(origine.getId()).setCost(0.0);
+        ShortestPathSolution solution;
+        final int nbNodes = data.getGraph().size();
+        Path pathTest = new Path(data.getGraph(),data.getOrigin());
+        Arc[] predecessorArcs = new Arc[nbNodes];
+
+        BinaryHeap<Label> tas= new BinaryHeap<Label>();
+        tas.insert(labels.get(origine.getId())); 
+        
+        while(!tas.isEmpty()){
+            Label x= tas.deleteMin();
+            x.setMarque(true);
+            for (Arc y:x.getSommet().getSuccessors()){
+                Label labelY=labels.get(y.getDestination().getId());
+                if (!labelY.getMarque()){
+                    //double coutAv = labelY.getCost();
+                    
+                    if (x.getCost()+y.getLength()<labelY.getCost()){
+                        if (labelY.getPere()!=null){
+                            tas.remove(labelY);
+                        }
+                        labelY.setCost(x.getCost()+y.getLength());
+                        Arc arc = y;
+                        labelY.setPere(y);
+                        tas.insert(labelY);
+                        predecessorArcs[arc.getDestination().getId()] = arc;
+
+
+                    }
+                    
+                }
+            }
+        }
+
+        if (labels.get(data.getDestination().getId()).getPere()==null){
+            solution = new ShortestPathSolution(data, Status.INFEASIBLE,pathTest);
+
+        }
+        else{
+            notifyDestinationReached(data.getDestination());
+
+            ArrayList<Arc> arcs = new ArrayList<>();
+            Arc arc = predecessorArcs[data.getDestination().getId()];
+            //Arc arc = labelY.getPere();
+            while(arc!=null){
+                arcs.add(arc);
+                arc = predecessorArcs[arc.getOrigin().getId()];
+
+            }
+            Collections.reverse(arcs);
+            Path pathSol = new Path(data.getGraph(), arcs);
+            solution = new ShortestPathSolution(data, Status.OPTIMAL,pathSol );
         }
         return solution;
     }
@@ -95,6 +157,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     public float getLengthDjis(){
         ShortestPathSolution solution=this.doRun();
         return solution.getPath().getLength();
+
+    }
+    public Path getPathDjis(ShortestPathData data){
+        ShortestPathSolution solution=this.doRun2(data);
+        return solution.getPath();
 
     }
 

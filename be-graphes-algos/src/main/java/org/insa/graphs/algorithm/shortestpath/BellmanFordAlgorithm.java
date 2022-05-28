@@ -24,6 +24,7 @@ public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
         Graph graph = data.getGraph();
 
         final int nbNodes = graph.size();
+        Path pathTest = new Path(data.getGraph(),data.getOrigin());
 
         // Initialize array of distances.
         double[] distances = new double[nbNodes];
@@ -68,11 +69,11 @@ public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
             }
         }
 
-        ShortestPathSolution solution = null;
+        ShortestPathSolution solution ;
 
         // Destination has no predecessor, the solution is infeasible...
         if (predecessorArcs[data.getDestination().getId()] == null) {
-            solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+            solution = new ShortestPathSolution(data, Status.INFEASIBLE,pathTest);
         }
         else {
 

@@ -25,8 +25,11 @@ import org.junit.Test;
 
 public class DjistraTest {
 
-    private final String mapName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/haute-garonne.mapgr";
-    private final String pathName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31_insa_bikini_canal.path";
+    private final String mapName = "/Users/patrickosornio/Dev/BE-Graphes/haute-garonne.mapgr";
+    private final String pathName = "/Users/patrickosornio/Dev/BE-Graphes/path_fr31_insa_bikini_canal.path";
+
+    //private final String mapName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/haute-garonne.mapgr";
+    //private final String pathName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31_insa_bikini_canal.path";
 
        
 
@@ -60,31 +63,33 @@ public class DjistraTest {
      public void testRandom() throws IOException{
         int correcte= 0;
 
-    for (int i=0;i<2;i++){
+    for (int i=0;i<5;i++){
         Node or = path.getOrigin();
         int id = or.getId();
         float longi = (float) (or.getPoint().getLongitude()+ (int) Math.random() *(300-(-200)));
         float lat =(float) or.getPoint().getLatitude() + (int) Math.random() *(300-(-200));
         Point pt = new Point(longi, lat);
-        Node origine =new Node(id, pt);
+        Node orMod =new Node(id, pt);
         //path.setOrigin(origine);
 
 
-        Node dest = path.getOrigin();
+        Node dest = path.getDestination();
         int idD = dest.getId();
         float longiD = (float) (dest.getPoint().getLongitude()+ (int) Math.floor(Math.random() *(300-(-200))));
         float latD =(float) dest.getPoint().getLatitude() +(int) Math.floor( Math.random() *(300-(-200)));
         Point ptD = new Point(longiD, latD);
-        Node origineD =new Node(idD, ptD);
+        Node destMod =new Node(idD, ptD);
         //data.setOrigin(origineD);
-        ArcInspector aInspector = ArcInspectorFactory.getAllFilters().get(0);
-        ShortestPathData data = new ShortestPathData(graph, origine, origineD, aInspector) ;
+        ArcInspector aInspector = ArcInspectorFactory.getAllFilters().get(1);
+        ShortestPathData data = new ShortestPathData(graph, orMod, destMod, aInspector) ;
         ShortestPathSolution solBell = new BellmanFordAlgorithm(data).run();
-        ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
-        if (solBell.getPath()==solDjis.getPath()) {
+       // ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
+        float belLenght = solBell.getPath().getLength();
+        float dijLen = new DijkstraAlgorithm(data).getPathDjis(data).getLength();
+        if (belLenght>=dijLen) {
             correcte++; }  
     }
-    assertEquals(2, correcte);
+    assertEquals(5, correcte);
 }
 
     @Test
