@@ -40,8 +40,8 @@ public class DjistraTest {
      //ShortestPathData data = "new-zealand";
 
     
-    private Graph graph;
-    private Path path;
+    protected Graph graph;
+    protected Path path;
     private Node[] listnode;
     private Arc a2b, a2c, a2e, b2c, c2d_1, c2d_2, c2d_3, c2a, d2a, d2e, e2d;
 
@@ -54,12 +54,10 @@ public class DjistraTest {
     public void initAll() throws IOException {
         final GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
 
-        // TODO: Read the graph.
         graph = reader.read();
 
         final PathReader pathReader = new BinaryPathReader(new DataInputStream(new BufferedInputStream(new FileInputStream(pathName))));
 
-        // TODO: Read the path.
         path = pathReader.readPath(graph);
         
     }
@@ -69,9 +67,13 @@ public class DjistraTest {
     }
 
     @Test
-     public void testRandom() throws IOException, IllegalArgumentException{
+     public void testRandom() throws IOException{
         List <ShortestPathSolution> listeBF = new ArrayList<>();
         List <ShortestPathSolution> listeD = new ArrayList<>();
+        List <Path> pathBF = new ArrayList<>();
+        List <Path> pathD = new ArrayList<>();
+
+
         ArcInspector aInspector = ArcInspectorFactory.getAllFilters().get(1);
         //int correcte=0;
         boolean[] cond ={false,false,false} ;
@@ -93,12 +95,16 @@ public class DjistraTest {
         float latD =(float) dest.getPoint().getLatitude() +(int) Math.floor( Math.random() *(10000-(-10000)));
         Point ptD = new Point(longiD, latD);
         Node destMod =new Node(idD, ptD);
-        //data.setOrigin(origineD);
+
+
         ShortestPathData data = new ShortestPathData(graph, orMod, destMod, aInspector) ;
         ShortestPathSolution solBell = AlgoaComparer(data);
         ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
         listeBF.add(solBell);
         listeD.add(solDjis);
+        pathBF.add((solBell.getPath()));
+        pathD.add((solDjis.getPath()));
+
     }
 
 
@@ -107,13 +113,14 @@ public class DjistraTest {
     ShortestPathSolution solDjis = new DijkstraAlgorithm(data).run();
     listeBF.add(solBell);
     listeD.add(solDjis);
+    pathBF.add((solBell.getPath()));
+    pathD.add((solDjis.getPath()));
 
     for (int j=0; j < 3; j++){
         
         if (listeBF.get(j).getPath()==null && listeD.get(j).getPath()==null){
             cond[j]=true;
             //Les deux paths sont invalides ie dest=origine
-            //throw new IllegalArgumentException("Path is not Valid!!") ;
         } 
         else if ((listeBF.get(j).getPath().getLength()>=listeD.get(j).getPath().getLength())) {
             cond[j]=true;

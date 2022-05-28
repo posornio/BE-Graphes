@@ -11,13 +11,12 @@ public class LabelStar extends Label {
     public LabelStar(Node sommetCourant,ShortestPathData data) {
         super(sommetCourant);
         this.destination = data.getDestination();
-        //TODO Auto-generated constructor stub
     }
     
     public Node getDestination(){
         return this.destination;
     }
 public double getTotalCost() {
-    return  this.getCost()+(double) Point.distance(this.getSommet().getPoint(), destination.getPoint());
+    return  this.getCost()+ Point.distance(this.getSommet().getPoint(), destination.getPoint());
 
   }}

@@ -1,11 +1,8 @@
 package org.insa.graphs.algorithm.shortestpath;
 
-import java.time.chrono.HijrahEra;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.algorithm.Label;
@@ -13,8 +10,6 @@ import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
-import org.insa.graphs.model.Point;
-import org.insa.graphs.model.RoadInformation;
 
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
